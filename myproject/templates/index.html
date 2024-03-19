@@ -21,36 +21,47 @@
         min-width: 2em;
         font-weight: bold;
     }
+
 </style>
 
 {% endblock %}
+
 {% block content %}
+
 <div class="container mt-5">
     <h1 class="text-center">Welcome to Notify</h1>
 </div>
+
+{% for note in notes %}
+<div class="d-inline-flex p-2 bd-highlight">
+    <p>{{ note.title }}</p>
+    <p>{{ note.content }}</p>
+</div>
+{% endfor %}
+
 {% endblock %}
 
 {% block js_script %}
 <script>
     // setup chat scoket
-    const notifyScoket = new WebSocket(
+    const notifySocket = new WebSocket(
         'ws://'
         + window.location.host
         + '/ws/notify/'
     );
 
     // on socket open
-    notifyScoket.onopen = function (e) {
+    notifySocket.onopen = function (e) {
         console.log('Socket successfully connected.');
     };
 
     // on socket close
-    notifyScoket.onclose = function (e) {
+    notifySocket.onclose = function (e) {
         console.log('Socket closed unexpectedly');
     };
 
     // on receiving message on group
-    notifyScoket.onmessage = function (e) {
+    notifySocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
         const message = data.message;
         // Call the setMessage function to add the new li element
